@@ -1,11 +1,13 @@
-import { combineReducers, createStore } from 'redux'
+import { createStore } from 'redux'
+import { composeWithDevTools } from "redux-devtools-extension";
 
-const reducerB = (state = { loggedIn: false }, action: {type: string, payload: any}) => {
+const reducerB = (state = { loggedIn: false, name: "" }, action: {type: string, payload: any}) => {
 
   switch ( action.type ) {
     case 'LOGGED_IN_B': {
       return {
         loggedIn: true,
+        name: action.payload.name
       }
     }
 
@@ -15,10 +17,19 @@ const reducerB = (state = { loggedIn: false }, action: {type: string, payload: a
   }
 }
 
-const allReducers = combineReducers({
-  reducerB
-});
+(window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  serialize: {
+    options: {
+      function: (fn: any) => fn.toString(),
+      instanceId: 'b store',
+      undefined: true,
+    }
+  }
+})
 
-const StoreB = createStore(allReducers)
+const StoreB = createStore(
+  reducerB,
+  composeWithDevTools()
+)
 
 export default StoreB 
